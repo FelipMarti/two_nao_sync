@@ -1,0 +1,65 @@
+<launch>
+
+    <!--                                                            -->
+    <!--    Start all the basic stuff for a single NAO robot        -->
+    <!--                                                            -->
+
+    <!--            -->
+    <!-- PARAMETERS -->
+    <!--            -->
+    <arg name="nao_ip" />
+    <arg name="ROBOT" default="r1" />
+
+
+    <group ns="$(arg ROBOT)" >
+
+        <!--                                                            -->
+        <!-- LAUNCHING NAO Bring up                                     -->
+        <!--                                                            -->
+        <include file="$(find nao_bringup)/launch/nao_full_py.launch">
+            <arg name="nao_ip" value="$(arg nao_ip)"/>
+        </include>
+
+
+        <!--                                                            -->
+        <!-- LAUNCHING LEDs effects service package, and requirements   -->
+        <!--                                                            -->
+    
+        <!-- Requirements -->
+        <include file="$(find nao_apps)/launch/leds.launch">
+            <arg name="nao_ip" value="$(arg nao_ip)"/>
+        </include>
+    
+        <!-- Leds effects -->
+        <include file="$(find nao_leds_effects)/launch/nao_leds_effects.launch">
+        </include>
+    
+    
+        <!--                                                            -->
+        <!-- LAUNCHING other requirements                               -->
+        <!--                                                            -->
+
+        <!-- Tactile -->
+        <include file="$(find nao_apps)/launch/tactile.launch">
+            <arg name="nao_ip" value="$(arg nao_ip)"/>
+        </include>
+    
+        <!-- Behaviours -->
+        <include file="$(find nao_apps)/launch/behaviors.launch">
+            <arg name="nao_ip" value="$(arg nao_ip)"/>
+        </include>
+    
+        <!-- Speech -->
+        <include file="$(find nao_apps)/launch/speech.launch">
+            <arg name="nao_ip" value="$(arg nao_ip)"/>
+        </include>
+    
+        <!-- alife -->
+        <include file="$(find nao_apps)/launch/alife.launch">
+            <arg name="nao_ip" value="$(arg nao_ip)"/>
+        </include>
+
+    </group>
+    
+</launch>
+

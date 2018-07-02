@@ -1,0 +1,53 @@
+<launch>
+
+    <!--                                                            -->
+    <!--        Two NAO robots counting in sync launcher            -->
+    <!--                                                            -->
+
+    <!--            -->
+    <!-- VARIABLES  -->
+    <!--            -->
+    <arg name="nao_ip_1" />
+    <arg name="nao_ip_2" />
+
+    <!--            -->
+    <!-- PARAMETERS -->
+    <!--            -->
+    <arg name="robot_1" value="r1" />
+    <arg name="robot_2" value="r2" />
+
+
+    <!--                                                             -->
+    <!-- LAUNCHING robot nodes, one include roslaunch for each robot -->
+    <!--                                                             -->
+    <include file="$(find two_nao_sync)/launch/single_nao_with_req.launch">
+        <arg name="ROBOT" value="$(arg robot_1)" />
+        <arg name="nao_ip" value="$(arg nao_ip_1)" />
+    </include>
+
+
+    <include file="$(find two_nao_sync)/launch/single_nao_with_req.launch">
+        <arg name="ROBOT" value="$(arg robot_2)" />
+        <arg name="nao_ip" value="$(arg nao_ip_2)" />
+    </include>
+
+
+    <!--                                                            -->
+    <!-- LAUNCHING The program that counts                          -->
+    <!--                                                            -->
+
+    <node name="two_nao_sync" 
+        pkg="two_nao_sync" 
+        type="two_nao_count_together_node" 
+        output="screen" > 
+        <remap from="r1_tactile_head" to="$(arg robot_1)/tactile_touch" />
+        <remap from="r2_tactile_head" to="$(arg robot_2)/tactile_touch" />
+        <remap from="r1_alife_enabled" to="$(arg robot_1)/nao_alife/solitary" />
+        <remap from="r1_alife_disabled" to="$(arg robot_1)/nao_alife/disabled" />
+        <remap from="r2_alife_enabled" to="$(arg robot_2)/nao_alife/solitary" />
+        <remap from="r2_alife_disabled" to="$(arg robot_2)/nao_alife/disabled" />
+        <remap from="r1_leds" to="$(arg robot_1)/fade_rgb" />
+        <remap from="r2_leds" to="$(arg robot_2)/fade_rgb" />
+    </node>
+
+</launch>
