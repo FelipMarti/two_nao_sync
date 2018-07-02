@@ -20,6 +20,7 @@
 
 #include "ros/ros.h"
 #include "std_srvs/Empty.h"
+#include "std_msgs/String.h"
 
 #include "naoqi_bridge_msgs/FadeRGB.h"
 #include "naoqi_bridge_msgs/HeadTouch.h"
@@ -44,6 +45,10 @@ private:
     // [publisher attributes]
     ros::Publisher pubR1Led;
     ros::Publisher pubR2Led;
+    ros::Publisher pubR1Say;
+    ros::Publisher pubR2Say;
+    void rob1_say (std::string text);
+    void rob2_say (std::string text);
 
     // [subscriber attributes]
     ros::Subscriber subR1Head;

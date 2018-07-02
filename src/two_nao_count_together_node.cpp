@@ -9,6 +9,9 @@
  *      -Publishers to the brain LEDs (nao_apps) for R1 and R2
  *      -Clients to Enable autonomous life mode (nao_apps) for R1 and R2
  *      -Clients to Disable autonomous life mode (nao_apps) for R1 and R2
+ *      -Two ways to make the robots R1 and R2 talk:
+ *          +Publishing at speech, non-blocking function
+ *          +Actionlib (nao_apps), blocking function
  *
  *      GNU General Public License v3.0 
  *      Copyright (c) 2018 Felip Marti Carrillo  
@@ -18,17 +21,22 @@
 #include "two_nao_count_together_node.h"
 
 
+/**
+ *  TwoNaoCountTogether Constructor 
+ */
 TwoNaoCountTogether::TwoNaoCountTogether (void) {
 
     // [init publishers]
     this->pubR1Led = this->n.advertise<naoqi_bridge_msgs::FadeRGB>("r1_leds", 1);
     this->pubR2Led = this->n.advertise<naoqi_bridge_msgs::FadeRGB>("r2_leds", 1);
+    this->pubR1Say = this->n.advertise<std_msgs::String>("r1_speech", 1);
+    this->pubR2Say = this->n.advertise<std_msgs::String>("r2_speech", 1);
     
     // [init subscribers]
-    this->subR1Head = this->n.subscribe("r1_tactile_head", 1000,
+    this->subR1Head = this->n.subscribe("r1_tactile_head", 10,
                 &TwoNaoCountTogether::r1_head_callback, this);
 
-    this->subR2Head = this->n.subscribe("r2_tactile_head", 1000,
+    this->subR2Head = this->n.subscribe("r2_tactile_head", 10,
                 &TwoNaoCountTogether::r2_head_callback, this);
 
 
@@ -40,11 +48,17 @@ TwoNaoCountTogether::TwoNaoCountTogether (void) {
 
 }
 
+
+/**
+ *  TwoNaoCountTogether Destructor 
+ */
 TwoNaoCountTogether::~TwoNaoCountTogether (void) {
 }
 
 
-
+/**
+ *  Robot 1 head tactile callback
+ */
 void TwoNaoCountTogether::r1_head_callback(const naoqi_bridge_msgs::HeadTouch::ConstPtr& msg)
 {
 
@@ -90,7 +104,9 @@ void TwoNaoCountTogether::r1_head_callback(const naoqi_bridge_msgs::HeadTouch::C
 }
 
 
-
+/**
+ *  Robot 2 head tactile callback
+ */
 void TwoNaoCountTogether::r2_head_callback(const naoqi_bridge_msgs::HeadTouch::ConstPtr& msg)
 {
 
@@ -136,7 +152,28 @@ void TwoNaoCountTogether::r2_head_callback(const naoqi_bridge_msgs::HeadTouch::C
 }
 
 
+/**
+ *  2 Functions to publish the speech, one for each robot
+ */
+void TwoNaoCountTogether::rob1_say(std::string text)
+{
+    std_msgs::String msg;
+    msg.data = text;
+    pubR1Say.publish(msg);
+}
 
+void TwoNaoCountTogether::rob2_say(std::string text)
+{
+    std_msgs::String msg;
+    msg.data = text;
+    pubR2Say.publish(msg);
+}
+
+
+
+/**
+ *  The Main function
+ */
 int TwoNaoCountTogether::Main () 
 {
 
@@ -196,12 +233,18 @@ int TwoNaoCountTogether::Main ()
         // Robot 1 counts
         else if (this->state == ROB1_STATE) {
             this->counter++;
+            std::stringstream text;
+            text << this->counter;
+            rob1_say(text.str());
             ROS_INFO("Robot 1 says: %u", this->counter);
             this->state = ROB2_STATE;
         }
         // Robot 2 counts
         else if (this->state == ROB2_STATE) {
             this->counter++;
+            std::stringstream text;
+            text << this->counter;
+            rob2_say(text.str());
             ROS_INFO("Robot 2 says: %u", this->counter);
             this->state = ROB1_STATE;
         }
@@ -220,13 +263,10 @@ int TwoNaoCountTogether::Main ()
 }
 
 
-
 int main(int argc, char **argv)
 {
-
     ros::init(argc, argv, "two_nao_sync");
 
     TwoNaoCountTogether foo;
     return foo.Main();
-
 }

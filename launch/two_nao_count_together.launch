@@ -18,7 +18,7 @@
 
 
     <!--                                                             -->
-    <!-- LAUNCHING robot nodes, one include roslaunch for each robot -->
+    <!-- LAUNCHING robot nodes, include a roslaunch for each robot   -->
     <!--                                                             -->
     <include file="$(find two_nao_sync)/launch/single_nao_with_req.launch">
         <arg name="ROBOT" value="$(arg robot_1)" />
@@ -35,7 +35,6 @@
     <!--                                                            -->
     <!-- LAUNCHING The program that counts                          -->
     <!--                                                            -->
-
     <node name="two_nao_sync" 
         pkg="two_nao_sync" 
         type="two_nao_count_together_node" 
@@ -48,6 +47,8 @@
         <remap from="r2_alife_disabled" to="$(arg robot_2)/nao_alife/disabled" />
         <remap from="r1_leds" to="$(arg robot_1)/fade_rgb" />
         <remap from="r2_leds" to="$(arg robot_2)/fade_rgb" />
+        <remap from="r1_speech" to="$(arg robot_1)/speech" />
+        <remap from="r2_speech" to="$(arg robot_2)/speech" />
     </node>
 
 </launch>
