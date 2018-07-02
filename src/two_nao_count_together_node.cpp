@@ -12,6 +12,7 @@
  *      -Two ways to make the robots R1 and R2 talk:
  *          +Publishing at speech, non-blocking function
  *          +Actionlib (nao_apps), blocking function
+ *      -Acionlib client to run behaviours (nao_apps) for R1 and R2
  *
  *      GNU General Public License v3.0 
  *      Copyright (c) 2018 Felip Marti Carrillo  
@@ -25,6 +26,8 @@
  *  TwoNaoCountTogether Constructor 
  */
 TwoNaoCountTogether::TwoNaoCountTogether (void) :
+    r1BehaviourActionClient("r1_run_behavior", true),
+    r2BehaviourActionClient("r2_run_behavior", true),
     r1SpeechActionClient("r1_speech_action", true),
     r2SpeechActionClient("r2_speech_action", true)
 {
@@ -156,6 +159,50 @@ void TwoNaoCountTogether::r2_head_callback(const naoqi_bridge_msgs::HeadTouch::C
 
 
 /**
+ *  2 Functions to call the actionlib server for the behaviours, one for each robot
+ */
+void TwoNaoCountTogether::r1_behaviour_make_action_request(std::string behaviour)
+{
+    ROS_INFO("[R1] Waiting for Behaviour action server to start");
+    r1BehaviourActionClient.waitForServer(); //will wait for infinite time
+    ROS_INFO("[R1] Behaviour action server started, sending goal");
+    naoqi_bridge_msgs::RunBehaviorActionGoal behaviourGoal;
+    behaviourGoal.goal.behavior = behaviour;
+    r1BehaviourActionClient.sendGoal(behaviourGoal.goal);
+
+    // Wait 30 seconds maximum
+    bool finished_before_timeout = r1BehaviourActionClient.waitForResult(ros::Duration(30.0));
+    if (finished_before_timeout) {
+        ROS_INFO("[R1] Behaviour action server has finished");
+    }
+    else {
+        ROS_WARN("[R1] Behaviour action server hasn't finished on time...");
+    }
+}
+
+
+void TwoNaoCountTogether::r2_behaviour_make_action_request(std::string behaviour)
+{
+    ROS_INFO("[R2] Waiting for Behaviour action server to start");
+    r2BehaviourActionClient.waitForServer(); //will wait for infinite time
+    ROS_INFO("[R2] Behaviour action server started, sending goal");
+    naoqi_bridge_msgs::RunBehaviorActionGoal behaviourGoal;
+    behaviourGoal.goal.behavior = behaviour;
+    r2BehaviourActionClient.sendGoal(behaviourGoal.goal);
+
+    // Wait 30 seconds maximum
+    bool finished_before_timeout = r2BehaviourActionClient.waitForResult(ros::Duration(30.0));
+    if (finished_before_timeout) {
+        ROS_INFO("[R2] Behaviour action server has finished");
+    }
+    else {
+        ROS_WARN("[R2] Behaviour action server hasn't finished on time...");
+    }
+}
+
+
+
+/**
  *  2 Functions to call the actionlib server for the speech, one for each robot
  */
 void TwoNaoCountTogether::r1_speech_make_action_request(std::string text)
@@ -251,6 +298,16 @@ int TwoNaoCountTogether::Main ()
     this->counter = 0;
     this->ledsOn = true;
 
+    // Some speech before the robots start
+    rob1_say("Lets count together!");
+    r1_behaviour_make_action_request("animations/Stand/Emotions/Positive/Excited_1");
+    
+    rob2_say("Thats super boring... Isn't it?... I would rather be sleeping... Or in the pub... Drinking beer!");
+    r2_behaviour_make_action_request("animations/Stand/Emotions/Negative/Bored_1");
+
+    rob1_say("Well... its better than a plagiarism speech!");
+    r1_behaviour_make_action_request("animations/Stand/Emotions/Positive/Confident_1");
+
     while (ros::ok()) {
 
         // Wait being tapped, blinking brain LEDs to indicate NAOs are waiting
@@ -282,8 +339,10 @@ int TwoNaoCountTogether::Main ()
             this->counter++;
             std::stringstream text;
             text << this->counter;
-            r1_speech_make_action_request(text.str());
-            //rob1_say(text.str());
+
+            r1_behaviour_make_action_request("animations/Stand/Gestures/CountOne_1");
+            rob1_say(text.str());
+
             ROS_INFO("Robot 1 says: %u", this->counter);
             this->state = ROB2_STATE;
         }
@@ -292,8 +351,10 @@ int TwoNaoCountTogether::Main ()
             this->counter++;
             std::stringstream text;
             text << this->counter;
-            r2_speech_make_action_request(text.str());
-            //rob2_say(text.str());
+
+            r2_behaviour_make_action_request("animations/Stand/Gestures/CountOne_1");
+            rob2_say(text.str());
+
             ROS_INFO("Robot 2 says: %u", this->counter);
             this->state = ROB1_STATE;
         }

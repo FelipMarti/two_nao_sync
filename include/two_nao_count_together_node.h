@@ -9,6 +9,10 @@
  *      -Publishers to the brain LEDs (nao_apps) for R1 and R2
  *      -Clients to Enable autonomous life mode (nao_apps) for R1 and R2
  *      -Clients to Disable autonomous life mode (nao_apps) for R1 and R2
+ *      -Two ways to make the robots R1 and R2 talk:
+ *          +Publishing at speech, non-blocking function
+ *          +Actionlib (nao_apps), blocking function
+ *      -Acionlib client to run behaviours (nao_apps) for R1 and R2
  *
  *      GNU General Public License v3.0 
  *      Copyright (c) 2018 Felip Marti Carrillo  
@@ -26,6 +30,7 @@
 #include "naoqi_bridge_msgs/HeadTouch.h"
 #include <actionlib/client/simple_action_client.h>
 #include <naoqi_bridge_msgs/SpeechWithFeedbackAction.h>
+#include <naoqi_bridge_msgs/RunBehaviorAction.h>
 
 #define WAIT_STATE 0
 #define ROB1_STATE 1
@@ -70,7 +75,11 @@ private:
     actionlib::SimpleActionClient<naoqi_bridge_msgs::SpeechWithFeedbackAction> r2SpeechActionClient;
     void r1_speech_make_action_request(std::string text);
     void r2_speech_make_action_request(std::string text);
-
+    actionlib::SimpleActionClient<naoqi_bridge_msgs::RunBehaviorAction> r1BehaviourActionClient;
+    actionlib::SimpleActionClient<naoqi_bridge_msgs::RunBehaviorAction> r2BehaviourActionClient;
+    void r1_behaviour_make_action_request(std::string behaviour);
+    void r2_behaviour_make_action_request(std::string behaviour);
+    
 
 public:
 

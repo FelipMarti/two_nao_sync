@@ -51,6 +51,8 @@
         <remap from="r2_speech" to="$(arg robot_2)/speech" />
         <remap from="r1_speech_action" to="$(arg robot_1)/speech_action" />
         <remap from="r2_speech_action" to="$(arg robot_2)/speech_action" />
+        <remap from="r1_run_behavior" to="$(arg robot_1)/run_behavior" />
+        <remap from="r2_run_behavior" to="$(arg robot_2)/run_behavior" />
     </node>
 
 </launch>
