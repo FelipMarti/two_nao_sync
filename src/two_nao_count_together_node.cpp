@@ -24,7 +24,10 @@
 /**
  *  TwoNaoCountTogether Constructor 
  */
-TwoNaoCountTogether::TwoNaoCountTogether (void) {
+TwoNaoCountTogether::TwoNaoCountTogether (void) :
+    r1SpeechActionClient("r1_speech_action", true),
+    r2SpeechActionClient("r2_speech_action", true)
+{
 
     // [init publishers]
     this->pubR1Led = this->n.advertise<naoqi_bridge_msgs::FadeRGB>("r1_leds", 1);
@@ -153,6 +156,50 @@ void TwoNaoCountTogether::r2_head_callback(const naoqi_bridge_msgs::HeadTouch::C
 
 
 /**
+ *  2 Functions to call the actionlib server for the speech, one for each robot
+ */
+void TwoNaoCountTogether::r1_speech_make_action_request(std::string text)
+{
+    ROS_INFO("[R1] Waiting for Speech action server to start");
+    r1SpeechActionClient.waitForServer(); //will wait for infinite time
+    ROS_INFO("[R1] Speech action server started, sending goal");
+    naoqi_bridge_msgs::SpeechWithFeedbackActionGoal speechGoal;
+    speechGoal.goal.say = text;
+    r1SpeechActionClient.sendGoal(speechGoal.goal);
+
+    // Wait 30 seconds maximum
+    bool finished_before_timeout = r1SpeechActionClient.waitForResult(ros::Duration(30.0));
+    if (finished_before_timeout) {
+        ROS_INFO("[R1] Speech action server has finished");
+    }   
+    else {
+        ROS_WARN("[R1] Speech action server hasn't finished on time...");
+    }   
+}
+
+
+void TwoNaoCountTogether::r2_speech_make_action_request(std::string text)
+{
+    ROS_INFO("[R2] Waiting for Speech action server to start");
+    r2SpeechActionClient.waitForServer(); //will wait for infinite time
+    ROS_INFO("[R2] Speech action server started, sending goal");
+    naoqi_bridge_msgs::SpeechWithFeedbackActionGoal speechGoal;
+    speechGoal.goal.say = text;
+    r2SpeechActionClient.sendGoal(speechGoal.goal);
+
+    // Wait 30 seconds maximum
+    bool finished_before_timeout = r2SpeechActionClient.waitForResult(ros::Duration(30.0));
+    if (finished_before_timeout) {
+        ROS_INFO("[R2] Speech action server has finished");
+    }   
+    else {
+        ROS_WARN("[R2] Speech action server hasn't finished on time...");
+    }   
+}
+
+
+
+/**
  *  2 Functions to publish the speech, one for each robot
  */
 void TwoNaoCountTogether::rob1_say(std::string text)
@@ -235,7 +282,8 @@ int TwoNaoCountTogether::Main ()
             this->counter++;
             std::stringstream text;
             text << this->counter;
-            rob1_say(text.str());
+            r1_speech_make_action_request(text.str());
+            //rob1_say(text.str());
             ROS_INFO("Robot 1 says: %u", this->counter);
             this->state = ROB2_STATE;
         }
@@ -244,7 +292,8 @@ int TwoNaoCountTogether::Main ()
             this->counter++;
             std::stringstream text;
             text << this->counter;
-            rob2_say(text.str());
+            r2_speech_make_action_request(text.str());
+            //rob2_say(text.str());
             ROS_INFO("Robot 2 says: %u", this->counter);
             this->state = ROB1_STATE;
         }

@@ -49,6 +49,8 @@
         <remap from="r2_leds" to="$(arg robot_2)/fade_rgb" />
         <remap from="r1_speech" to="$(arg robot_1)/speech" />
         <remap from="r2_speech" to="$(arg robot_2)/speech" />
+        <remap from="r1_speech_action" to="$(arg robot_1)/speech_action" />
+        <remap from="r2_speech_action" to="$(arg robot_2)/speech_action" />
     </node>
 
 </launch>

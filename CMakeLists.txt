@@ -8,6 +8,7 @@ find_package(catkin REQUIRED COMPONENTS
   naoqi_bridge_msgs
   roscpp
   std_msgs
+  actionlib
 )
 
 ## System dependencies are found with CMake's conventions

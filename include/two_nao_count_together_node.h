@@ -24,6 +24,8 @@
 
 #include "naoqi_bridge_msgs/FadeRGB.h"
 #include "naoqi_bridge_msgs/HeadTouch.h"
+#include <actionlib/client/simple_action_client.h>
+#include <naoqi_bridge_msgs/SpeechWithFeedbackAction.h>
 
 #define WAIT_STATE 0
 #define ROB1_STATE 1
@@ -62,6 +64,12 @@ private:
     ros::ServiceClient r2AutLifeEnableClient;
     ros::ServiceClient r2AutLifeDisableClient;
     std_srvs::Empty empty_msg;
+
+    // [action client attributes]
+    actionlib::SimpleActionClient<naoqi_bridge_msgs::SpeechWithFeedbackAction> r1SpeechActionClient;
+    actionlib::SimpleActionClient<naoqi_bridge_msgs::SpeechWithFeedbackAction> r2SpeechActionClient;
+    void r1_speech_make_action_request(std::string text);
+    void r2_speech_make_action_request(std::string text);
 
 
 public:
