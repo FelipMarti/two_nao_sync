@@ -22,22 +22,13 @@
 
 
         <!--                                                            -->
-        <!-- LAUNCHING LEDs effects service package, and requirements   -->
+        <!-- LAUNCHING other requirements from nao_apps                 -->
         <!--                                                            -->
-    
-        <!-- Requirements -->
+
+        <!-- LEDs -->
         <include file="$(find nao_apps)/launch/leds.launch">
             <arg name="nao_ip" value="$(arg nao_ip)"/>
         </include>
-    
-        <!-- Leds effects -->
-        <include file="$(find nao_leds_effects)/launch/nao_leds_effects.launch">
-        </include>
-    
-    
-        <!--                                                            -->
-        <!-- LAUNCHING other requirements                               -->
-        <!--                                                            -->
 
         <!-- Tactile -->
         <include file="$(find nao_apps)/launch/tactile.launch">
