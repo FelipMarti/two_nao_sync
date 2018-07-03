@@ -33,8 +33,7 @@
 #include <naoqi_bridge_msgs/RunBehaviorAction.h>
 
 #define WAIT_STATE 0
-#define ROB1_STATE 1
-#define ROB2_STATE 2
+#define TALK_STATE 1
 
 class TwoNaoPlagiarismSpeech {
 
@@ -46,6 +45,7 @@ private:
 
     // Robot Variables
     unsigned int state;
+    unsigned int conversationPoint;
     bool ledsOn;
 
     // [publisher attributes]

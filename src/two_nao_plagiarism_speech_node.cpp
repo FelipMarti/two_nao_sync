@@ -82,7 +82,7 @@ void TwoNaoPlagiarismSpeech::r1_head_callback(const naoqi_bridge_msgs::HeadTouch
             ROS_INFO("[R1] Middle Button has been Released");
             if (this->state == WAIT_STATE) {
                 // Continue counting from robot 1
-                this->state = ROB1_STATE;
+                this->state = TALK_STATE;
                 // When counting Brain LEDs should be on
                 naoqi_bridge_msgs::FadeRGB msg; //publisher message
                 msg.led_name="BrainLeds";
@@ -130,7 +130,7 @@ void TwoNaoPlagiarismSpeech::r2_head_callback(const naoqi_bridge_msgs::HeadTouch
             ROS_INFO("[R2] Middle Button has been Released");
             if (this->state == WAIT_STATE) {
                 // Continue counting from robot 2
-                this->state = ROB2_STATE;
+                this->state = TALK_STATE;
                 // When counting Brain LEDs should be on
                 naoqi_bridge_msgs::FadeRGB msg; //publisher message
                 msg.led_name="BrainLeds";
@@ -274,8 +274,8 @@ int TwoNaoPlagiarismSpeech::Main ()
     // Main Loop
     ros::Rate loop_rate(2);  // Hz
 
-    // Wait 5 seconds to make sure everything (other nodes) are up
-    ros::Duration(5).sleep();
+    // Wait 7 seconds to make sure everything (other nodes) are up
+    ros::Duration(7).sleep();
 
     // Wake up the robots
     // Robot 1
@@ -295,11 +295,8 @@ int TwoNaoPlagiarismSpeech::Main ()
 
     // Init variables
     this->state = WAIT_STATE;
+    this->conversationPoint = 0;
     this->ledsOn = true;
-
-    // Some speech before the robots start
-    r1_speech_make_action_request("Lets talk about plagiarism!");
-    //TODO...
 
     while (ros::ok()) {
 
@@ -327,21 +324,238 @@ int TwoNaoPlagiarismSpeech::Main ()
             pubR1Led.publish(msg);
             pubR2Led.publish(msg);
         }
-        // Robot 1 counts
-        else if (this->state == ROB1_STATE) {
+        else if (this->state == TALK_STATE) {
+            // Robot 1 is HAL
+            // Robot 2 is C3PO
+            // The switch case is to be able to pause the speech during the conversation.
+            // I will be combining two different functions for the speech:
+            //  -robN_say (non-blocking, combined with rN_behaviour_make_action_request for the interactive speech)
+            //  -rN_speech_make_action_request (blocking, in order to help in the synchronization)
+            //
+            switch (this->conversationPoint) {
+            case 0: {
+                rob1_say("Hello... Good to see you.");
+                r1_behaviour_make_action_request("animations/Stand/Gestures/Hey_6");
+                this->conversationPoint++;
+                break;
+                }
+            case 1: {
+                rob2_say("Hi. Did you get the email with my section of the group assignment?");
+                r2_behaviour_make_action_request("animations/Stand/Emotions/Neutral/Determined_1");
+                this->conversationPoint++;
+                break;
+                }
+            case 2: {
+                r1_speech_make_action_request("Yes!");
+                rob1_say("It looks good... But, I think you forgot to cite your references.");
+                r1_behaviour_make_action_request("animations/Stand/Gestures/Explain_11");
+                this->conversationPoint++;
+                break;
+                }
+            case 3: {
+                r2_speech_make_action_request(" ");
+                rob2_say("Ooh!");
+                rob2_say("Im sorry... Could you add the references for me?");
+                r2_behaviour_make_action_request("animations/Stand/Emotions/Negative/Sorry_1");
+                this->conversationPoint++;
+                break;
+                }
+            case 4: {
+                r2_speech_make_action_request(" ");
+                this->conversationPoint++;
+                break;
+                }
+            case 5: {
+                rob1_say("Sorry, but I cant");
+                r1_behaviour_make_action_request("animations/Stand/Gestures/No_3");
+                this->conversationPoint++;
+                break;
+                }
+            case 6: {
+                rob1_say("If I do some of your assignment for you, thats contract cheating, which is a kind of plagiarism");
+                r1_behaviour_make_action_request("animations/Stand/BodyTalk/Speaking/BodyTalk_10");
+                r1_behaviour_make_action_request("animations/Stand/BodyTalk/Speaking/BodyTalk_11");
+                this->conversationPoint++;
+                break;
+                }
+            case 7: {
+                r1_speech_make_action_request(" ");
+                rob1_say("We could both get in trouble if I do that!");
+                r1_behaviour_make_action_request("animations/Stand/Gestures/YouKnowWhat_1");
+                this->conversationPoint++;
+                break;
+                }
+            case 8: {
+                r1_speech_make_action_request("But!");
+                this->conversationPoint++;
+                break;
+                }
+            case 9: {
+                rob1_say("I can show you how to reference properly if you need help.");
+                r1_behaviour_make_action_request("animations/Stand/Gestures/YouKnowWhat_5");
+                this->conversationPoint++;
+                break;
+                }
+            case 10: {
+                r1_speech_make_action_request(" ");
+                this->conversationPoint++;
+                break;
+                }
+            case 11: {
+                rob2_say("No thanks, I don't have time to finish my assignment myself.");
+                rob2_say("I will just leave the references out.");
+                r2_behaviour_make_action_request("animations/Stand/Gestures/No_8");
+                r2_behaviour_make_action_request("animations/Stand/Gestures/Reject_4");
+                r2_speech_make_action_request(" ");
+                //r2_behaviour_make_action_request("animations/Stand/Gestures/No_8");
+                this->conversationPoint++;
+                break;
+                }
+            case 12: {
+                rob1_say("I would prefer if you didn't.");
+                r1_behaviour_make_action_request("animations/Stand/Gestures/No_6");
+                this->conversationPoint++;
+                break;
+                }
+            case 13: {
+                r1_speech_make_action_request(" ");
+                rob1_say("If you don't reference your sources... you are plagiarising");
+                r1_behaviour_make_action_request("animations/Stand/BodyTalk/Thinking/Remember_2");
+                this->conversationPoint++;
+                break;
+                }
+            case 14: {
+                rob1_say("and its just as serious as cheating");
+                r1_behaviour_make_action_request("animations/Stand/Gestures/But_1");
+                this->conversationPoint++;
+                break;
+                }
+            case 15: {
+                r1_speech_make_action_request(" ");
+                rob1_say("If you don't put your references in");
+                r1_behaviour_make_action_request("animations/Stand/BodyTalk/Thinking/Remember_2");
+                this->conversationPoint++;
+                break;
+                }
+            case 16: {
+                rob1_say("you could get us in trouble... and also spoil the work done by the rest of our group");
+                r1_behaviour_make_action_request("animations/Stand/Emotions/Negative/Sad_2");
+                r1_speech_make_action_request(" ");
+                this->conversationPoint++;
+                break;
+                }
+            case 17: {
+                r2_speech_make_action_request(" ");
+                rob2_say("But... I'm not sure I have time to finish before the due date.");
+                r2_behaviour_make_action_request("animations/Stand/Waiting/Innocent_1");
+                this->conversationPoint++;
+                break;
+                }
+            case 18: {
+                rob1_say("If you are having trouble finding the time to finish your assignment");
+                rob1_say("we can try and get an extension from our tutor");
+                r1_behaviour_make_action_request("animations/Stand/BodyTalk/Speaking/BodyTalk_22");
+                r1_behaviour_make_action_request("animations/Stand/BodyTalk/Speaking/BodyTalk_5");
+                r1_behaviour_make_action_request("animations/Stand/BodyTalk/Speaking/BodyTalk_20");
 
-            rob1_say("Bla bla bla...");
-            r1_behaviour_make_action_request("animations/Stand/Gestures/CountOne_1");
+                this->conversationPoint++;
+                break;
+                }
+            case 19: {
+                rob1_say("Plagiarism is taken very seriously at Swinburne, and you could even get kicked out of Uni if you get caught");
+                r1_behaviour_make_action_request("animations/Stand/Gestures/YouKnowWhat_5");
+                r1_behaviour_make_action_request("animations/Stand/Gestures/YouKnowWhat_3");
+                r1_speech_make_action_request(" ");
+                this->conversationPoint++;
+                break;
+                }
+            case 20: {
+                r2_speech_make_action_request(" ");
+                rob2_say("Im sorry...I didn't realise that plagiarising was so serious");
+                rob2_say("and that it would be bad for my group members as well.");
+                r2_behaviour_make_action_request("animations/Stand/Emotions/Neutral/Mischievous_1");
+                r2_behaviour_make_action_request("animations/Stand/BodyTalk/Speaking/BodyTalk_17");
+                this->conversationPoint++;
+                break;
+                }
+            case 21: {
+                r2_speech_make_action_request(" ");
+                this->conversationPoint++;
+                break;
+                }
+            case 22: {
+                r2_speech_make_action_request(" ");
+                rob2_say("But now Im worried that I might plagiarise by accident... What if I accidentally reference something wrong?");
+                r2_behaviour_make_action_request("animations/Stand/Waiting/ScratchBottom_1");
+                r2_speech_make_action_request(" ");
+                this->conversationPoint++;
+                break;
+                }
+            case 23: {
+                r1_speech_make_action_request("Its okay!");
+                rob1_say("Swinburne provides many resources that you can use to make sure you aren't plagiarising.");
+                r1_behaviour_make_action_request("animations/Stand/Emotions/Positive/Proud_3");
+                this->conversationPoint++;
+                break;
+                }
+            case 24: {
+                r1_speech_make_action_request(" ");
+                rob1_say("Also, I highly recommend that you complete the Academic Integrity Module on Swinburne's Blackboard or Canvas websites.");
+                r1_behaviour_make_action_request("animations/Stand/Gestures/Explain_2");
+                r2_behaviour_make_action_request("animations/Stand/BodyTalk/Listening/Listening_2");
+                this->conversationPoint++;
+                break;
+                }
+            case 25: {
+                r1_speech_make_action_request(" ");
+                rob1_say("This Module should give you a good overview of what is considered Plagiarism and how to avoid doing something wrong.");
+                r1_behaviour_make_action_request("animations/Stand/BodyTalk/Speaking/BodyTalk_3");
+                r1_behaviour_make_action_request("animations/Stand/Gestures/Explain_1");
+                r1_speech_make_action_request(" ");
+                this->conversationPoint++;
+                break;
+                }
+            case 26: {
+                r2_speech_make_action_request(" ");
+                rob2_say("Sounds great. I will ask the Tutor for an extension and then go and check that out.");
+                r2_behaviour_make_action_request("animations/Stand/Emotions/Positive/Enthusiastic_1");
+                r2_speech_make_action_request(" ");
+                this->conversationPoint++;
+                break;
+                }
+            case 27: {
+                this->conversationPoint++;
+                break;
+                }
+            case 28: {
+                this->conversationPoint++;
+                break;
+                }
+            case 29: {
+                this->conversationPoint++;
+                break;
+                }
+            case 30: {
+                this->conversationPoint++;
+                break;
+                }
+            case 31: {
+                this->conversationPoint++;
+                break;
+                }
+            case 32: {
+                this->conversationPoint = 99;
+                break;
+                }
 
-            this->state = ROB2_STATE;
-        }
-        // Robot 2 counts
-        else if (this->state == ROB2_STATE) {
+            case 99: {
+                this->conversationPoint = 0;
+                this->state = WAIT_STATE;
+                break;
+                }
 
-            rob2_say("Yeah... nah...");
-            r2_behaviour_make_action_request("animations/Stand/Gestures/CountOne_1");
+            }
 
-            this->state = ROB1_STATE;
         }
         // You are doing something wrong mate...
         else {
