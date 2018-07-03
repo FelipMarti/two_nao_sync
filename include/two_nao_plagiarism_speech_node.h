@@ -10,7 +10,7 @@
  *      -Clients to Enable autonomous life mode (nao_apps) for R1 and R2
  *      -Clients to Disable autonomous life mode (nao_apps) for R1 and R2
  *      -Two ways to make the robots R1 and R2 talk:
- *          +Publishing at speech, non-blocking function
+ *          +Publishing at /speech topic, non-blocking function
  *          +Actionlib (nao_apps), blocking function
  *      -Acionlib client to run behaviours (nao_apps) for R1 and R2
  *

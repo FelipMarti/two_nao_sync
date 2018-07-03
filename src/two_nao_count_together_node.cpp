@@ -1,5 +1,5 @@
 /**
- *      This node controls two NAO robots to do a simple task such as 
+ *      This node controls two NAO robots doing a simple task such as 
  *      counting together.
  *
  *      In this code I'm merging different codes that can be found here:
@@ -10,7 +10,7 @@
  *      -Clients to Enable autonomous life mode (nao_apps) for R1 and R2
  *      -Clients to Disable autonomous life mode (nao_apps) for R1 and R2
  *      -Two ways to make the robots R1 and R2 talk:
- *          +Publishing at speech, non-blocking function
+ *          +Publishing at /speech topic, non-blocking function
  *          +Actionlib (nao_apps), blocking function
  *      -Acionlib client to run behaviours (nao_apps) for R1 and R2
  *
@@ -310,10 +310,10 @@ int TwoNaoCountTogether::Main ()
 
     while (ros::ok()) {
 
-        // Wait being tapped, blinking brain LEDs to indicate NAOs are waiting
+        // Wait being tapped. Blinking brain LEDs to indicate NAOs are waiting
         if (this->state == WAIT_STATE) {
 
-            naoqi_bridge_msgs::FadeRGB msg; //publisher message
+            naoqi_bridge_msgs::FadeRGB msg; // Publisher message
             msg.led_name="BrainLeds";
             msg.fade_duration= ros::Duration(0.0);
             if (this->ledsOn) {
