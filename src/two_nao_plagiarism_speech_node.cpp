@@ -81,9 +81,9 @@ void TwoNaoPlagiarismSpeech::r1_head_callback(const naoqi_bridge_msgs::HeadTouch
         else {
             ROS_INFO("[R1] Middle Button has been Released");
             if (this->state == WAIT_STATE) {
-                // Continue counting from robot 1
+                // Continue talking
                 this->state = TALK_STATE;
-                // When counting Brain LEDs should be on
+                // When talking Brain LEDs should be on
                 naoqi_bridge_msgs::FadeRGB msg; //publisher message
                 msg.led_name="BrainLeds";
                 msg.fade_duration= ros::Duration(0.0);
@@ -129,9 +129,9 @@ void TwoNaoPlagiarismSpeech::r2_head_callback(const naoqi_bridge_msgs::HeadTouch
         else {
             ROS_INFO("[R2] Middle Button has been Released");
             if (this->state == WAIT_STATE) {
-                // Continue counting from robot 2
+                // Continue talking
                 this->state = TALK_STATE;
-                // When counting Brain LEDs should be on
+                // When talking Brain LEDs should be on
                 naoqi_bridge_msgs::FadeRGB msg; //publisher message
                 msg.led_name="BrainLeds";
                 msg.fade_duration= ros::Duration(0.0);
@@ -329,8 +329,8 @@ int TwoNaoPlagiarismSpeech::Main ()
             // Robot 2 is C3PO
             // The switch case is to be able to pause the speech during the conversation.
             // I will be combining two different functions for the speech:
-            //  -robN_say (non-blocking, combined with rN_behaviour_make_action_request for the interactive speech)
-            //  -rN_speech_make_action_request (blocking, in order to help in the synchronization)
+            //  -robN_say (non-blocking, combined with rN_behaviour_make_action_request for the animated speech)
+            //  -rN_speech_make_action_request (blocking, in order to synchronise)
             //
             switch (this->conversationPoint) {
             case 0: {
