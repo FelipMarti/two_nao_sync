@@ -42,8 +42,8 @@ Open another terminal and execute the roslaunch with the 2 different IP addresse
 Open 1 terminal
 * `roscore`
 
-Open another terminal and execute the roslaunch with the 2 different IP addresses (or hostmanes) of the 2 robots. In my case nao.local is robot 1 and rosie.local is robot 2.
-* `roslaunch two_nao_plagiarism_speech.launch nao_ip_1:=nao.local nao_ip_2:=rosie.local`
+Open another terminal and execute the roslaunch with the 2 different IP addresses (or hostnames) of the 2 robots. In my case nao.local is robot 1 and rosie.local is robot 2.
+* `roslaunch two_nao_sync two_nao_plagiarism_speech.launch nao_ip_1:=nao.local nao_ip_2:=rosie.local`
 
 
 ## Future Improvements
