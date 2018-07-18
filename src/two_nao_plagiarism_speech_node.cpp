@@ -342,20 +342,21 @@ int TwoNaoPlagiarismSpeech::Main ()
             case 1: {
                 rob2_say("Hi. Did you get the email with my section of the group assignment?");
                 r2_behaviour_make_action_request("animations/Stand/Emotions/Neutral/Determined_1");
+                r2_speech_make_action_request(" ");
                 this->conversationPoint++;
                 break;
                 }
             case 2: {
                 r1_speech_make_action_request("Yes!");
                 rob1_say("It looks good so far... But, I think you forgot to cite your sources.");
-                rob1_say("Do you know when you will be able to complete your section?");
+                rob1_say("Do you know when you will be able to finish your section?");
                 r1_behaviour_make_action_request("animations/Stand/Gestures/Explain_3");
                 r1_behaviour_make_action_request("animations/Stand/Gestures/Explain_11");
                 this->conversationPoint++;
                 break;
                 }
             case 3: {
-                r2_speech_make_action_request(" ");
+                r1_speech_make_action_request(" ");
                 rob2_say("Ooh!");
                 rob2_say("Im sorry... I won't have time to finish the whole assignment");
                 r2_behaviour_make_action_request("animations/Stand/Emotions/Negative/Sorry_1");
