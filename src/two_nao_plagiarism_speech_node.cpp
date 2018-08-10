@@ -417,7 +417,7 @@ int TwoNaoPlagiarismSpeech::Main ()
                 break;
                 }
             case 12: {
-                rob1_say("Don’t do that! ");
+                rob1_say("Don't do that! ");
                 r1_behaviour_make_action_request("animations/Stand/Gestures/No_6");
                 this->conversationPoint++;
                 break;
@@ -430,35 +430,57 @@ int TwoNaoPlagiarismSpeech::Main ()
                 break;
                 }
             case 14: {
-                rob1_say("and its just as serious as cheating");
-                r1_behaviour_make_action_request("animations/Stand/Gestures/But_1");
+                r1_speech_make_action_request(" ");
+                rob1_say("Also, it's wrong of you to ask me to do your work for you.");
+                r1_behaviour_make_action_request("animations/Stand/Emotions/Neutral/Annoyed_1");
                 this->conversationPoint++;
                 break;
                 }
             case 15: {
+                rob1_say("That is a form of contract cheating");
+                r1_behaviour_make_action_request("animations/Stand/Gestures/But_1");
+                this->conversationPoint++;
+                break;
+                }
+            case 16: {
                 r1_speech_make_action_request(" ");
                 rob1_say("If you don't put your references in");
                 r1_behaviour_make_action_request("animations/Stand/BodyTalk/Thinking/Remember_2");
                 this->conversationPoint++;
                 break;
                 }
-            case 16: {
-                rob1_say("you could get us in trouble... and also spoil the work done by the rest of our group");
+            case 17: {
+                rob1_say("you could get in trouble... and also harm the work done by the rest of our group");
                 r1_behaviour_make_action_request("animations/Stand/Emotions/Negative/Sad_2");
                 r1_speech_make_action_request(" ");
                 this->conversationPoint++;
                 break;
                 }
-            case 17: {
+            case 18: {
+                rob1_say("You should reference your sources to give credit to the people whose work has helped shape your thoughts");
+                r1_behaviour_make_action_request("animations/Stand/BodyTalk/Speaking/BodyTalk_6");
+                r1_behaviour_make_action_request("animations/Stand/BodyTalk/Speaking/BodyTalk_7");
+                r1_speech_make_action_request(" ");
+                this->conversationPoint++;
+                break;
+                }
+            case 19: {
+                rob1_say("and it also highlights all research you have done");
+                r1_behaviour_make_action_request("animations/Stand/Gestures/Joy_1");
+                r1_speech_make_action_request(" ");
+                this->conversationPoint++;
+                break;
+                }
+            case 20: {
                 r2_speech_make_action_request(" ");
                 rob2_say("But... I'm not sure I have time to finish before the due date.");
                 r2_behaviour_make_action_request("animations/Stand/Waiting/Innocent_1");
                 this->conversationPoint++;
                 break;
                 }
-            case 18: {
+            case 21: {
                 rob1_say("If you are having trouble finding the time to finish your assignment");
-                rob1_say("we can try and get an extension from the unit convenor");
+                rob1_say("why not get some Academic Support? ");
                 r1_behaviour_make_action_request("animations/Stand/BodyTalk/Speaking/BodyTalk_22");
                 r1_behaviour_make_action_request("animations/Stand/BodyTalk/Speaking/BodyTalk_5");
                 r1_behaviour_make_action_request("animations/Stand/BodyTalk/Speaking/BodyTalk_20");
@@ -466,7 +488,7 @@ int TwoNaoPlagiarismSpeech::Main ()
                 this->conversationPoint++;
                 break;
                 }
-            case 19: {
+            case 22: {
                 rob1_say("Plagiarism is taken very seriously at Swinburne, and you could even get kicked out of Uni if you get caught");
                 r1_behaviour_make_action_request("animations/Stand/Gestures/YouKnowWhat_5");
                 r1_behaviour_make_action_request("animations/Stand/Gestures/YouKnowWhat_2");
@@ -474,21 +496,21 @@ int TwoNaoPlagiarismSpeech::Main ()
                 this->conversationPoint++;
                 break;
                 }
-            case 20: {
+            case 23: {
                 r2_speech_make_action_request(" ");
-                rob2_say("Im sorry...I didn't realise that plagiarising was so serious");
+                rob2_say("Im sorry... I didn't realise that plagiarising was so serious");
                 rob2_say("and that it would be bad for my group members as well.");
                 r2_behaviour_make_action_request("animations/Stand/Emotions/Neutral/Mischievous_1");
                 r2_behaviour_make_action_request("animations/Stand/BodyTalk/Speaking/BodyTalk_17");
                 this->conversationPoint++;
                 break;
                 }
-            case 21: {
+            case 24: {
                 r2_speech_make_action_request(" ");
                 this->conversationPoint++;
                 break;
                 }
-            case 22: {
+            case 25: {
                 r2_speech_make_action_request(" ");
                 rob2_say("But now Im worried that I might plagiarise by accident... What if I accidentally reference my sources incorrectly?");
                 r2_behaviour_make_action_request("animations/Stand/Waiting/ScratchBottom_1");
@@ -496,14 +518,14 @@ int TwoNaoPlagiarismSpeech::Main ()
                 this->conversationPoint++;
                 break;
                 }
-            case 23: {
+            case 26: {
                 r1_speech_make_action_request("Its okay!");
                 rob1_say("Swinburne has many resources that you can use to help you reference and cite your sources correctly.");
                 r1_behaviour_make_action_request("animations/Stand/Emotions/Positive/Proud_3");
                 this->conversationPoint++;
                 break;
                 }
-            case 24: {
+            case 27: {
                 r1_speech_make_action_request(" ");
                 rob1_say("You can find help on the Swinburne website, or you can ask your Tutors or Lecturers to help you out.");
                 r1_behaviour_make_action_request("animations/Stand/Emotions/Positive/Proud_2");
@@ -511,7 +533,7 @@ int TwoNaoPlagiarismSpeech::Main ()
                 this->conversationPoint++;
                 break;
                 }
-            case 25: {
+            case 28: {
                 r1_speech_make_action_request(" ");
                 rob1_say("Also, I highly recommend that you complete the Academic Integrity Module... that you can find when you log into the learning management system.");
                 r1_behaviour_make_action_request("animations/Stand/Gestures/Explain_2");
@@ -519,7 +541,7 @@ int TwoNaoPlagiarismSpeech::Main ()
                 this->conversationPoint++;
                 break;
                 }
-            case 26: {
+            case 29: {
                 r1_speech_make_action_request(" ");
                 rob1_say("It gives you a good overview of what is considered Plagiarism and how to avoid doing something wrong.");
                 r1_behaviour_make_action_request("animations/Stand/BodyTalk/Speaking/BodyTalk_3");
@@ -528,23 +550,11 @@ int TwoNaoPlagiarismSpeech::Main ()
                 this->conversationPoint++;
                 break;
                 }
-            case 27: {
+            case 30: {
                 r2_speech_make_action_request(" ");
-                rob2_say("Sounds great. I will ask our convenor for an extension, and then go and check that out.");
+                rob2_say("Sounds great. I will go and check the Academic Integrity module.");
                 r2_behaviour_make_action_request("animations/Stand/Emotions/Positive/Enthusiastic_1");
                 r2_speech_make_action_request(" ");
-                this->conversationPoint++;
-                break;
-                }
-            case 28: {
-                this->conversationPoint++;
-                break;
-                }
-            case 29: {
-                this->conversationPoint++;
-                break;
-                }
-            case 30: {
                 this->conversationPoint++;
                 break;
                 }
@@ -553,6 +563,18 @@ int TwoNaoPlagiarismSpeech::Main ()
                 break;
                 }
             case 32: {
+                this->conversationPoint++;
+                break;
+                }
+            case 33: {
+                this->conversationPoint++;
+                break;
+                }
+            case 34: {
+                this->conversationPoint++;
+                break;
+                }
+            case 35: {
                 this->conversationPoint = 99;
                 break;
                 }
