@@ -1,5 +1,8 @@
 ROBOTS SCRIPT
 
+Rosie is C3PO
+Chip is HAL
+
 HAL:	Hello. Good to see you.
 
 C3PO:	Hi. Did you get the email with my section of the group assignment?

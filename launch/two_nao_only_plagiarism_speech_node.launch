@@ -1,0 +1,50 @@
+<launch>
+
+    <!--                                                            -->
+    <!--        Two NAO robots talking about plagiarism launcher    -->
+    <!--                                                            -->
+
+    <!--            -->
+    <!-- VARIABLES  -->
+    <!--            -->
+    <arg name="nao_ip_1" />
+    <arg name="nao_ip_2" />
+
+    <!--            -->
+    <!-- PARAMETERS -->
+    <!--            -->
+    <arg name="robot_1" value="r1" />
+    <arg name="robot_2" value="r2" />
+
+
+    <!--                                                             -->
+    <!-- LAUNCHING robot nodes, include a roslaunch for each robot   -->
+    <!--                                                             -->
+    <!-- This might crash, so we delete them                         -->
+    <!--                                                             -->
+
+
+    <!--                                                            -->
+    <!-- LAUNCHING The program with the speech                      -->
+    <!--                                                            -->
+    <node name="two_nao_sync" 
+        pkg="two_nao_sync" 
+        type="two_nao_plagiarism_speech_node" 
+        output="screen" > 
+        <remap from="r1_tactile_head" to="$(arg robot_1)/tactile_touch" />
+        <remap from="r2_tactile_head" to="$(arg robot_2)/tactile_touch" />
+        <remap from="r1_alife_enabled" to="$(arg robot_1)/nao_alife/solitary" />
+        <remap from="r1_alife_disabled" to="$(arg robot_1)/nao_alife/disabled" />
+        <remap from="r2_alife_enabled" to="$(arg robot_2)/nao_alife/solitary" />
+        <remap from="r2_alife_disabled" to="$(arg robot_2)/nao_alife/disabled" />
+        <remap from="r1_leds" to="$(arg robot_1)/fade_rgb" />
+        <remap from="r2_leds" to="$(arg robot_2)/fade_rgb" />
+        <remap from="r1_speech" to="$(arg robot_1)/speech" />
+        <remap from="r2_speech" to="$(arg robot_2)/speech" />
+        <remap from="r1_speech_action" to="$(arg robot_1)/speech_action" />
+        <remap from="r2_speech_action" to="$(arg robot_2)/speech_action" />
+        <remap from="r1_run_behavior" to="$(arg robot_1)/run_behavior" />
+        <remap from="r2_run_behavior" to="$(arg robot_2)/run_behavior" />
+    </node>
+
+</launch>
